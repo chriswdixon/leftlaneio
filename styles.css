@@ -288,7 +288,7 @@ body {
 
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--spacing-xl);
     margin-top: var(--spacing-2xl);
 }
@@ -322,6 +322,23 @@ body {
 .service-icon svg {
     width: 30px;
     height: 30px;
+}
+
+/* Colorful service icons */
+.service-icon-blue {
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+}
+
+.service-icon-purple {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+}
+
+.service-icon-green {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+}
+
+.service-icon-orange {
+    background: linear-gradient(135deg, #f97316, #ea580c) !important;
 }
 
 .service-title {
@@ -533,12 +550,22 @@ body {
    RESPONSIVE DESIGN
    ============================================ */
 
+@media (max-width: 1200px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 968px) {
     .contact-wrapper {
         grid-template-columns: 1fr;
     }
     
     .footer-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .services-grid {
         grid-template-columns: 1fr;
     }
 }
@@ -579,10 +606,6 @@ body {
     
     .section-title {
         font-size: 2rem;
-    }
-    
-    .services-grid {
-        grid-template-columns: 1fr;
     }
 }
 
