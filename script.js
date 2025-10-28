@@ -64,6 +64,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Smooth scroll for CTA buttons (Get Started & Learn More)
+    const ctaButtons = document.querySelectorAll('.btn[href^="#"]');
+    ctaButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                
+                const target = document.querySelector(href);
+                if (target) {
+                    // Use 20px offset for CTA buttons to show headers properly
+                    const offsetTop = target.offsetTop - 20;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+    
     // ============================================
     // CONTACT FORM
     // ============================================
