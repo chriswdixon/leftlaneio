@@ -1,0 +1,34 @@
+# OS files
+.DS_Store
+Thumbs.db
+*~
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env.local
+.env.*.local
+
+# Optional files to ignore if you don't want to track documentation
+# (Uncomment these if you want to exclude docs from the repo)
+
+# README.md
+# NETLIFY_DEPLOY.md
+# CUSTOMIZATION.md
+# DEPLOYMENT.md
+# DEPLOYMENT_SUMMARY.md
+# CONTACT_FORM_SOLUTIONS.md
+# HOSTING_RECOMMENDATIONS.md
+# SUMMARY.md
+# index.txt
+# README_NETLIFY.txt
+
