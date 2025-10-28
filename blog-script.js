@@ -443,19 +443,161 @@ document.addEventListener('DOMContentLoaded', function() {
     // POST VIEWER (Modal or separate page)
     // ============================================
     
-    function openPost(postId) {
-        // For now, we'll show an alert. In a full implementation,
-        // you'd open a modal or navigate to a separate post page
-        incrementViewCount(postId);
-        showMessage('Post viewer coming soon! Post ID: ' + postId, 'info');
+    async function fetchSinglePost(postId) {
+        try {
+            const url = `${SUPABASE_URL}/rest/v1/blog_posts?id=eq.${postId}&select=*,blog_categories(name,slug,color),blog_post_tags(blog_tags(name,slug))`;
+            
+            const response = await fetch(url, {
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const posts = await response.json();
+            return posts.length > 0 ? posts[0] : null;
+        } catch (error) {
+            console.error('Error fetching single post:', error);
+            return null;
+        }
+    }
+    
+    function renderModalPost(post) {
+        const categoryColor = post.blog_categories?.color || '#0c71c3';
+        const categoryName = post.blog_categories?.name || 'Uncategorized';
+        const tags = post.blog_post_tags?.map(pt => pt.blog_tags) || [];
         
-        // TODO: Implement full post viewer
-        // This could be a modal or a separate page (post.html?id=123)
+        return `
+            <div class="modal-post-content">
+                <div class="modal-post-hero">
+                    ${post.featured_image_url ? 
+                        `<img src="${post.featured_image_url}" alt="${post.title}" loading="lazy">` :
+                        ''
+                    }
+                    <div class="modal-post-hero-overlay">
+                        <div class="modal-post-meta">
+                            <div class="category-badge" style="background-color: ${categoryColor}">
+                                ${categoryName}
+                            </div>
+                            <h1>${post.title}</h1>
+                            <div class="modal-post-info">
+                                <span>📅 ${formatDate(post.published_at)}</span>
+                                <span>⏱️ ${calculateReadTime(post.content)} min read</span>
+                                <span>👁️ ${post.view_count || 0} views</span>
+                                ${post.author_name ? `<span>✍️ ${post.author_name}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-post-body">
+                    ${post.excerpt ? `
+                        <div class="modal-post-excerpt">
+                            ${post.excerpt}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="modal-post-content-area">
+                        ${post.content}
+                    </div>
+                    
+                    ${tags.length > 0 ? `
+                        <div class="modal-post-tags">
+                            <h4>Tags</h4>
+                            <div class="tags-container">
+                                ${tags.map(tag => `<span class="tag">${tag.name}</span>`).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    }
+    
+    async function openPost(postId) {
+        const modal = document.getElementById('post-modal');
+        const modalBody = document.getElementById('post-modal-body');
+        
+        if (!modal || !modalBody) {
+            showMessage('Error: Post viewer not found', 'error');
+            return;
+        }
+        
+        // Show modal with loading state
+        modal.classList.add('active');
+        modalBody.innerHTML = `
+            <div class="post-loader">
+                <div class="loading-spinner"></div>
+                <p>Loading post...</p>
+            </div>
+        `;
+        
+        // Fetch and display post
+        try {
+            const post = await fetchSinglePost(postId);
+            
+            if (!post) {
+                modalBody.innerHTML = `
+                    <div class="post-loader">
+                        <h3>Post not found</h3>
+                        <p>The requested post could not be found.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Increment view count
+            incrementViewCount(postId);
+            
+            // Render post content
+            modalBody.innerHTML = renderModalPost(post);
+            
+        } catch (error) {
+            console.error('Error loading post:', error);
+            modalBody.innerHTML = `
+                <div class="post-loader">
+                    <h3>Error loading post</h3>
+                    <p>There was an error loading the post. Please try again.</p>
+                </div>
+            `;
+            showMessage('Error loading post', 'error');
+        }
+    }
+    
+    function closeModal() {
+        const modal = document.getElementById('post-modal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
     }
     
     // ============================================
     // INITIALIZATION
     // ============================================
+    
+    // Modal event listeners
+    const modal = document.getElementById('post-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const modalOverlay = modal?.querySelector('.post-modal-overlay');
+    
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+    }
+    
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', closeModal);
+    }
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal?.classList.contains('active')) {
+            closeModal();
+        }
+    });
     
     // Load initial content
     loadFeaturedPosts();
