@@ -217,8 +217,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>${formatDate(post.published_at || post.created_at)}</td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn-icon btn-edit" onclick="editPost(${post.id})">✏️</button>
-                            <button class="btn-icon btn-delete" onclick="deletePost(${post.id})">🗑️</button>
+                            <button class="btn-icon btn-preview" onclick="previewPost(${post.id})" title="Preview Post">👁️</button>
+                            <button class="btn-icon btn-edit" onclick="editPost(${post.id})" title="Edit Post">✏️</button>
+                            ${post.status === 'published' ? 
+                                `<button class="btn-icon btn-unpublish" onclick="unpublishPost(${post.id})" title="Unpublish Post">📤</button>` :
+                                post.status === 'draft' ? 
+                                `<button class="btn-icon btn-publish" onclick="publishPost(${post.id})" title="Publish Post">📥</button>` : ''
+                            }
+                            <button class="btn-icon btn-delete" onclick="deletePost(${post.id})" title="Delete Post">🗑️</button>
                         </div>
                     </td>
                 </tr>
@@ -722,8 +728,211 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // ============================================
+    // POST PREVIEW AND PUBLISH FUNCTIONS
+    // ============================================
+    
+    async function fetchSinglePostForPreview(postId) {
+        try {
+            const url = `/blog_posts?id=eq.${postId}&select=*,blog_categories(name,slug,color),blog_post_tags(blog_tags(name,slug))`;
+            const posts = await apiRequest(url);
+            return posts.length > 0 ? posts[0] : null;
+        } catch (error) {
+            console.error('Error fetching post for preview:', error);
+            return null;
+        }
+    }
+    
+    function renderModalPost(post) {
+        const categoryColor = post.blog_categories?.color || '#0c71c3';
+        const categoryName = post.blog_categories?.name || 'Uncategorized';
+        const tags = post.blog_post_tags?.map(pt => pt.blog_tags) || [];
+        
+        // Calculate read time
+        const wordsPerMinute = 200;
+        const wordCount = post.content ? post.content.replace(/<[^>]*>/g, '').split(/\s+/).length : 0;
+        const readTime = Math.ceil(wordCount / wordsPerMinute);
+        
+        // Format date
+        const formatDate = (dateString) => {
+            if (!dateString) return 'Not published';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        };
+        
+        return `
+            <div class="modal-post-content">
+                <div class="modal-post-hero">
+                    ${post.featured_image_url ? 
+                        `<img src="${post.featured_image_url}" alt="${post.title}" loading="lazy">` :
+                        ''
+                    }
+                    <div class="modal-post-hero-overlay">
+                        <div class="modal-post-meta">
+                            <div class="category-badge" style="background-color: ${categoryColor}">
+                                ${categoryName}
+                            </div>
+                            <h1>${post.title}</h1>
+                            <div class="modal-post-info">
+                                <span>📅 ${formatDate(post.published_at)}</span>
+                                <span>⏱️ ${readTime} min read</span>
+                                <span>👁️ ${post.view_count || 0} views</span>
+                                <span>📝 Status: ${post.status}</span>
+                                ${post.author_name ? `<span>✍️ ${post.author_name}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-post-body">
+                    ${post.excerpt ? `
+                        <div class="modal-post-excerpt">
+                            ${post.excerpt}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="modal-post-content-area">
+                        ${post.content}
+                    </div>
+                    
+                    ${tags.length > 0 ? `
+                        <div class="modal-post-tags">
+                            <h4>Tags</h4>
+                            <div class="tags-container">
+                                ${tags.map(tag => `<span class="tag">${tag.name}</span>`).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    }
+    
+    window.previewPost = async function(postId) {
+        const modal = document.getElementById('post-modal');
+        const modalBody = document.getElementById('post-modal-body');
+        
+        if (!modal || !modalBody) {
+            showMessage('Error: Post viewer not found', 'error');
+            return;
+        }
+        
+        // Show modal with loading state
+        modal.classList.add('active');
+        modalBody.innerHTML = `
+            <div class="post-loader">
+                <div class="loading-spinner"></div>
+                <p>Loading post preview...</p>
+            </div>
+        `;
+        
+        try {
+            const post = await fetchSinglePostForPreview(postId);
+            
+            if (!post) {
+                modalBody.innerHTML = `
+                    <div class="post-loader">
+                        <h3>Post not found</h3>
+                        <p>The requested post could not be found.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Render post content
+            modalBody.innerHTML = renderModalPost(post);
+            
+        } catch (error) {
+            console.error('Error loading post preview:', error);
+            modalBody.innerHTML = `
+                <div class="post-loader">
+                    <h3>Error loading preview</h3>
+                    <p>There was an error loading the post preview. Please try again.</p>
+                </div>
+            `;
+            showMessage('Error loading preview', 'error');
+        }
+    };
+    
+    window.publishPost = async function(postId) {
+        if (!confirm('Are you sure you want to publish this post?')) return;
+        
+        try {
+            showLoading();
+            await apiRequest(`/blog_posts?id=eq.${postId}`, 'PATCH', {
+                status: 'published',
+                published_at: new Date().toISOString()
+            });
+            showMessage('Post published successfully!', 'success');
+            loadPosts();
+            if (currentSection === 'dashboard') {
+                loadDashboardStats();
+                loadRecentPosts();
+            }
+        } catch (error) {
+            console.error('Error publishing post:', error);
+            showMessage('Error publishing post', 'error');
+        } finally {
+            hideLoading();
+        }
+    };
+    
+    window.unpublishPost = async function(postId) {
+        if (!confirm('Are you sure you want to unpublish this post? It will be moved back to draft status.')) return;
+        
+        try {
+            showLoading();
+            await apiRequest(`/blog_posts?id=eq.${postId}`, 'PATCH', {
+                status: 'draft',
+                published_at: null
+            });
+            showMessage('Post unpublished successfully!', 'success');
+            loadPosts();
+            if (currentSection === 'dashboard') {
+                loadDashboardStats();
+                loadRecentPosts();
+            }
+        } catch (error) {
+            console.error('Error unpublishing post:', error);
+            showMessage('Error unpublishing post', 'error');
+        } finally {
+            hideLoading();
+        }
+    };
+    
+    function closePostModal() {
+        const modal = document.getElementById('post-modal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    }
+    
+    // ============================================
     // INITIALIZATION
     // ============================================
+    
+    // Modal event listeners for post preview
+    const postModal = document.getElementById('post-modal');
+    const closePostViewerBtn = document.getElementById('close-post-viewer');
+    const postModalOverlay = postModal?.querySelector('.post-modal-overlay');
+    
+    if (closePostViewerBtn) {
+        closePostViewerBtn.addEventListener('click', closePostModal);
+    }
+    
+    if (postModalOverlay) {
+        postModalOverlay.addEventListener('click', closePostModal);
+    }
+    
+    // Close post modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && postModal?.classList.contains('active')) {
+            closePostModal();
+        }
+    });
     
     // Load initial section
     showSection('dashboard');
