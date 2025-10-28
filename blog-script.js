@@ -490,6 +490,16 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <span>👁️ ${post.view_count || 0} views</span>
                                 ${post.author_name ? `<span>✍️ ${post.author_name}</span>` : ''}
                             </div>
+                            
+                            <div class="modal-post-actions">
+                                <button class="share-post-btn" onclick="sharePost(${post.id}, '${post.title.replace(/'/g, "\\'")}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="m9 12 2 2 4-4"/>
+                                        <path d="M12 2a10 10 0 1 0 10 10"/>
+                                    </svg>
+                                    Share Link
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -518,7 +528,96 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
     
-    async function openPost(postId) {
+    // Share post functionality
+    window.sharePost = function(postId, postTitle) {
+        const currentUrl = new URL(window.location);
+        currentUrl.searchParams.set('post', postId);
+        const shareUrl = currentUrl.toString();
+        
+        if (navigator.share) {
+            // Use native sharing if available
+            navigator.share({
+                title: postTitle,
+                text: `Check out this blog post: ${postTitle}`,
+                url: shareUrl
+            }).catch(err => {
+                console.log('Error sharing:', err);
+                copyToClipboard(shareUrl, postTitle);
+            });
+        } else {
+            // Fallback to copying URL
+            copyToClipboard(shareUrl, postTitle);
+        }
+    };
+    
+    function copyToClipboard(text, title) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+                showMessage(`Link copied to clipboard!`, 'success');
+            }).catch(() => {
+                fallbackCopyToClipboard(text, title);
+            });
+        } else {
+            fallbackCopyToClipboard(text, title);
+        }
+    }
+    
+    function fallbackCopyToClipboard(text, title) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            document.execCommand('copy');
+            showMessage(`Link copied to clipboard!`, 'success');
+        } catch (err) {
+            showMessage(`Copy failed. URL: ${text}`, 'info');
+        }
+        
+        document.body.removeChild(textArea);
+    }
+    
+    // ============================================
+    // URL ROUTING AND DIRECT LINKING
+    // ============================================
+    
+    function getUrlParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+    
+    function updateUrlWithPost(postId, postSlug = null) {
+        const url = new URL(window.location);
+        url.searchParams.set('post', postId);
+        if (postSlug) {
+            url.searchParams.set('slug', postSlug);
+        }
+        window.history.pushState({ postId }, '', url);
+    }
+    
+    function removePostFromUrl() {
+        const url = new URL(window.location);
+        url.searchParams.delete('post');
+        url.searchParams.delete('slug');
+        window.history.pushState({}, '', url);
+    }
+    
+    function checkForDirectPostLink() {
+        const postId = getUrlParameter('post');
+        if (postId) {
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                openPost(postId, false); // false = don't update URL again
+            }, 100);
+        }
+    }
+    
+    async function openPost(postId, updateUrl = true) {
         const modal = document.getElementById('post-modal');
         const modalBody = document.getElementById('post-modal-body');
         
@@ -550,6 +649,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
+            // Update URL for sharing (only if not already loading from URL)
+            if (updateUrl) {
+                updateUrlWithPost(postId, post.slug);
+            }
+            
             // Increment view count
             incrementViewCount(postId);
             
@@ -572,6 +676,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById('post-modal');
         if (modal) {
             modal.classList.remove('active');
+            // Remove post from URL when closing
+            removePostFromUrl();
         }
     }
     
@@ -599,9 +705,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Handle browser navigation (back/forward buttons)
+    window.addEventListener('popstate', function(event) {
+        const postId = getUrlParameter('post');
+        const modal = document.getElementById('post-modal');
+        
+        if (postId && !modal?.classList.contains('active')) {
+            // User navigated to a post URL
+            openPost(postId, false);
+        } else if (!postId && modal?.classList.contains('active')) {
+            // User navigated away from post URL
+            closeModal();
+        }
+    });
+    
     // Load initial content
     loadFeaturedPosts();
     loadPosts();
+    
+    // Check if we should open a specific post from URL
+    checkForDirectPostLink();
     
     console.log('Blog system initialized successfully');
 });
