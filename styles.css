@@ -154,10 +154,17 @@ body {
     gap: var(--spacing-sm);
 }
 
-.logo img {
+.logo img,
+.logo-img {
     height: 50px;
     width: auto;
     filter: brightness(0) invert(1);
+}
+
+.logo-text {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--text-primary);
 }
 
 .nav-menu {
