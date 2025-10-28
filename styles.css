@@ -700,6 +700,30 @@ body {
     background-color: var(--background-color);
 }
 
+/* Light Mode - Dark Gradient Navbar */
+[data-theme="light"] .navbar,
+:root:not([data-theme="dark"]) .navbar {
+    background: linear-gradient(135deg, 
+        rgba(15, 23, 42, 0.95) 0%,     /* Dark slate */
+        rgba(30, 41, 59, 0.92) 50%,    /* Medium slate */
+        rgba(51, 65, 85, 0.90) 100%    /* Lighter slate */
+    );
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .navbar.scrolled,
+:root:not([data-theme="dark"]) .navbar.scrolled {
+    background: linear-gradient(135deg, 
+        rgba(15, 23, 42, 0.98) 0%,     /* More opaque dark slate */
+        rgba(30, 41, 59, 0.95) 50%,    /* More opaque medium slate */
+        rgba(51, 65, 85, 0.93) 100%    /* More opaque lighter slate */
+    );
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark Mode - Original Navbar Styles */
 [data-theme="dark"] .navbar {
     background: rgba(17, 24, 39, 0.8);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
