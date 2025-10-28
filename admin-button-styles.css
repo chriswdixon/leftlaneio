@@ -1,0 +1,36 @@
+/* Additional button styles for admin preview and publish functionality */
+.btn-preview {
+    color: #0c71c3 !important;
+    background: rgba(12, 113, 195, 0.1) !important;
+    transition: all 0.2s ease;
+}
+
+.btn-preview:hover {
+    background: #0c71c3 !important;
+    color: white !important;
+    transform: scale(1.1);
+}
+
+.btn-publish {
+    color: #10b981 !important;
+    background: rgba(16, 185, 129, 0.1) !important;
+    transition: all 0.2s ease;
+}
+
+.btn-publish:hover {
+    background: #10b981 !important;
+    color: white !important;
+    transform: scale(1.1);
+}
+
+.btn-unpublish {
+    color: #f59e0b !important;
+    background: rgba(245, 158, 11, 0.1) !important;
+    transition: all 0.2s ease;
+}
+
+.btn-unpublish:hover {
+    background: #f59e0b !important;
+    color: white !important;
+    transform: scale(1.1);
+}
