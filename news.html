@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Insights - LeftLane.io</title>
+    <meta name="description" content="Latest insights, case studies, and technology updates from LeftLane.io. Stay ahead with our expert analysis and industry trends.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="blog-styles.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="logo.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- Background -->
+    <div class="background"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img src="logo.svg" alt="LeftLane.io">
+                    <span class="logo-text">LeftLane.io</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="#services" class="nav-link">Services</a></li>
+                    <li><a href="news.html" class="nav-link active">News</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                </ul>
+                
+                <div class="nav-right">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                        <span id="theme-icon">☀️</span>
+                    </button>
+                    <button class="menu-toggle" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="blog-hero">
+            <div class="container">
+                <div class="blog-hero-content">
+                    <h1 class="blog-hero-title">
+                        News & <span class="gradient-text">Insights</span>
+                    </h1>
+                    <p class="blog-hero-subtitle">
+                        Stay ahead with the latest technology trends, case studies, and expert insights from our team
+                    </p>
+                    
+                    <!-- Category Filter -->
+                    <div class="category-filter">
+                        <button class="filter-btn active" data-category="all">All Posts</button>
+                        <button class="filter-btn" data-category="technology">Technology</button>
+                        <button class="filter-btn" data-category="ai-ml">AI & ML</button>
+                        <button class="filter-btn" data-category="web-dev">Web Dev</button>
+                        <button class="filter-btn" data-category="business">Business</button>
+                        <button class="filter-btn" data-category="case-studies">Case Studies</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Posts -->
+        <section class="featured-posts">
+            <div class="container">
+                <h2 class="section-title">Featured Posts</h2>
+                <div class="featured-grid" id="featured-posts">
+                    <!-- Featured posts will be loaded here -->
+                    <div class="featured-post-skeleton">
+                        <div class="skeleton-animation"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- All Posts -->
+        <section class="all-posts">
+            <div class="container">
+                <div class="posts-header">
+                    <h2 class="section-title">Latest Posts</h2>
+                    <div class="posts-controls">
+                        <div class="search-box">
+                            <input type="text" id="search-input" placeholder="Search posts..." class="search-input">
+                            <button class="search-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.35-4.35"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <select id="sort-select" class="sort-select">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="popular">Most Popular</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="posts-grid" id="posts-grid">
+                    <!-- Blog posts will be loaded here -->
+                    <div class="post-card-skeleton">
+                        <div class="skeleton-animation"></div>
+                    </div>
+                    <div class="post-card-skeleton">
+                        <div class="skeleton-animation"></div>
+                    </div>
+                    <div class="post-card-skeleton">
+                        <div class="skeleton-animation"></div>
+                    </div>
+                </div>
+                
+                <!-- Load More Button -->
+                <div class="load-more-container">
+                    <button id="load-more-btn" class="load-more-btn">
+                        Load More Posts
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Signup -->
+        <section class="newsletter-signup">
+            <div class="container">
+                <div class="newsletter-content">
+                    <h2>Stay Updated</h2>
+                    <p>Get the latest insights and updates delivered straight to your inbox</p>
+                    <form class="newsletter-form" id="newsletter-form">
+                        <input type="email" placeholder="Enter your email address" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <img src="logo.svg" alt="LeftLane.io">
+                        <span class="logo-text">LeftLane.io</span>
+                    </div>
+                    <p>Accelerating your digital transformation with cutting-edge technology solutions.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="#" data-category="technology">Technology</a></li>
+                        <li><a href="#" data-category="ai-ml">AI & Machine Learning</a></li>
+                        <li><a href="#" data-category="web-dev">Web Development</a></li>
+                        <li><a href="#" data-category="business">Business Strategy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" aria-label="LinkedIn">LinkedIn</a>
+                        <a href="#" aria-label="Twitter">Twitter</a>
+                        <a href="#" aria-label="GitHub">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 LeftLane.io LLC. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="blog-script.js"></script>
+</body>
+</html>
