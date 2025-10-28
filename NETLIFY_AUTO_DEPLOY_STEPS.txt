@@ -1,0 +1,70 @@
+🚀 SET UP NETLIFY AUTO-DEPLOY NOW
+═══════════════════════════════════════════════════
+
+YOUR CODE IS ON GITHUB:
+https://github.com/chriswdixon/leftlaneio
+
+═══════════════════════════════════════════════════
+
+STEP 1: Go to Netlify
+https://app.netlify.com
+
+STEP 2: Import from GitHub
+1. Click "Add new site"
+2. Click "Import an existing project"
+3. Click "Deploy with GitHub"
+4. Authorize Netlify (first time)
+5. Select repository: chriswdixon/leftlaneio
+6. Click "Deploy site"
+
+STEP 3: Configure Settings
+Build command: (leave empty)
+Publish directory: (leave empty - it's in root)
+Branch to deploy: main
+
+STEP 4: Deploy!
+- Click "Deploy site"
+- Wait 30 seconds
+- Your site is LIVE!
+
+═══════════════════════════════════════════════════
+
+AFTER DEPLOYMENT:
+
+1. Enable Form Notifications:
+   - Forms tab → Settings
+   - Enable email notifications
+   - Add your email
+
+2. Add Custom Domain (leftlane.io):
+   - Domain settings → Add custom domain
+   - Follow DNS instructions
+
+3. Test the contact form!
+
+═══════════════════════════════════════════════════
+
+FROM NOW ON:
+
+Every time you:
+  git add .
+  git commit -m "changes"
+  git push
+
+Netlify will automatically:
+  ✅ Detect changes
+  ✅ Rebuild site
+  ✅ Deploy (30 seconds)
+  ✅ Update live site!
+
+═══════════════════════════════════════════════════
+
+YOUR SITE URL:
+Once deployed, Netlify will give you a URL like:
+https://random-name-123.netlify.app
+
+You can rename it in:
+Site settings → Site details → Change site name
+
+═══════════════════════════════════════════════════
+
