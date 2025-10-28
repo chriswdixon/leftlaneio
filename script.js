@@ -99,16 +99,38 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show sending message
             showMessage('Sending message...', 'info');
             
-            // Submit to Netlify Forms
-            fetch('/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams(new FormData(contactForm)).toString()
-            })
-            .then(response => {
-                if (response.ok) {
+            // Save to Supabase Database + Netlify Forms
+            Promise.all([
+                // Save to Supabase
+                fetch('https://mohluzgrkwpcccyzgoyw.supabase.co/rest/v1/contacts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1vaGx1emdya3dwY2NjeXpnb3l3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2MTQ5NzgsImV4cCI6MjA3NzE5MDk3OH0.roks081S2ViNcGCgqm98gfapXlQHbA42jBgm1VieLe4',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1vaGx1emdya3dwY2NjeXpnb3l3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2MTQ5NzgsImV4cCI6MjA3NzE5MDk3OH0.roks081S2ViNcGCgqm98gfapXlQHbA42jBgm1VieLe4'
+                    },
+                    body: JSON.stringify({
+                        name: formData.name,
+                        email: formData.email,
+                        subject: formData.subject,
+                        message: formData.message,
+                        submitted_at: new Date().toISOString()
+                    })
+                }),
+                // Also submit to Netlify Forms (backup)
+                fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(new FormData(contactForm)).toString()
+                })
+            ])
+            .then(responses => {
+                const supabaseSuccess = responses[0].ok;
+                const netlifySuccess = responses[1].ok;
+                
+                if (supabaseSuccess || netlifySuccess) {
                     showMessage('Thank you! Your message has been sent successfully. We\'ll get back to you soon.', 'success');
                     contactForm.reset();
                 } else {
