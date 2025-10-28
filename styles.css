@@ -10,18 +10,22 @@
 }
 
 :root {
-    /* Color Scheme - Update these to match your brand */
-    --primary-color: #6366f1;
-    --primary-dark: #4f46e5;
-    --primary-light: #818cf8;
-    --secondary-color: #8b5cf6;
+    /* Main Brand Color - #0c71c3 from "Keeping You in the Fast Lane" */
+    --primary-color: #0c71c3;
+    --primary-dark: #0a5da0;
+    --primary-light: #2b87da;
+    --secondary-color: #f3f700;
     --accent-color: #10b981;
+    
+    /* Light Mode Colors */
     --text-primary: #1f2937;
     --text-secondary: #6b7280;
     --text-light: #9ca3af;
     --background-color: #ffffff;
     --background-alt: #f9fafb;
     --border-color: #e5e7eb;
+    
+    /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -29,6 +33,7 @@
     
     /* Typography */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-handwriting: 'Kaushan Script', handwriting;
     
     /* Spacing */
     --spacing-xs: 0.5rem;
@@ -48,6 +53,21 @@
     --transition-fast: 150ms;
     --transition-base: 250ms;
     --transition-slow: 350ms;
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-light: #9ca3af;
+    --background-color: #111827;
+    --background-alt: #1f2937;
+    --border-color: #374151;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
 }
 
 html {
@@ -79,6 +99,11 @@ body {
     background-position: center;
     z-index: -1;
     opacity: 1;
+    transition: opacity var(--transition-base);
+}
+
+[data-theme="dark"] .background {
+    opacity: 0.3;
 }
 
 /* Container */
@@ -183,6 +208,32 @@ body {
     height: 3px;
     background: white;
     transition: var(--transition-base);
+}
+
+/* Dark Mode Toggle */
+.theme-toggle {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    z-index: 999;
+    transition: var(--transition-base);
+    color: white;
+    font-size: 1.5rem;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-xl);
 }
 
 /* ============================================
@@ -633,5 +684,61 @@ body {
     .contact-form {
         padding: var(--spacing-md);
     }
+    
+    .theme-toggle {
+        bottom: 1rem;
+        right: 1rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1.25rem;
+    }
+}
+
+/* Dark Mode Specific Styles */
+[data-theme="dark"] body {
+    background-color: var(--background-color);
+}
+
+[data-theme="dark"] .navbar {
+    background: rgba(17, 24, 39, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .navbar.scrolled {
+    background: rgba(17, 24, 39, 0.95);
+}
+
+[data-theme="dark"] .service-card,
+[data-theme="dark"] .info-card,
+[data-theme="dark"] .contact-form {
+    background: var(--background-alt);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .service-card:hover {
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .hero-title,
+[data-theme="dark"] .hero-subtitle,
+[data-theme="dark"] .section-title,
+[data-theme="dark"] .service-title,
+[data-theme="dark"] .info-card h4 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .hero-subtitle {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea {
+    background: var(--background-color);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .footer {
+    background: #0f172a;
 }
 
