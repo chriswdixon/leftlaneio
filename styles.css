@@ -142,6 +142,12 @@ body {
     padding: 1rem 0;
 }
 
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
 .logo {
     display: flex;
     align-items: center;
@@ -206,28 +212,24 @@ body {
 
 /* Dark Mode Toggle */
 .theme-toggle {
-    position: fixed;
-    top: 1.5rem;
-    right: 1.5rem;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: var(--primary-color);
-    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow-lg);
-    z-index: 999;
     transition: var(--transition-base);
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    backdrop-filter: blur(10px);
 }
 
 .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
     transform: scale(1.1);
-    box-shadow: var(--shadow-xl);
 }
 
 /* ============================================
@@ -687,11 +689,9 @@ body {
     }
     
     .theme-toggle {
-        top: 1rem;
-        right: 1rem;
-        width: 45px;
-        height: 45px;
-        font-size: 1.25rem;
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
     }
 }
 
