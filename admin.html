@@ -40,6 +40,12 @@
                 </ul>
                 
                 <div class="nav-right">
+                    <div class="admin-user-info">
+                        <span id="admin-user-email" class="admin-user-email">admin@leftlane.io</span>
+                        <button id="logout-btn" class="logout-btn" onclick="logout()">
+                            Logout
+                        </button>
+                    </div>
                     <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
                         <span id="theme-icon">☀️</span>
                     </button>
@@ -367,6 +373,7 @@
 
     <!-- Scripts -->
     <script src="script.js"></script>
+    <script src="auth.js"></script>
     <script src="admin-script.js"></script>
 </body>
 </html>

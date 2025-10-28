@@ -4,6 +4,24 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     
+    // ============================================
+    // AUTHENTICATION CHECK
+    // ============================================
+    
+    // Check if user is authenticated before loading admin functionality
+    if (!requireAuth()) {
+        return; // Exit if not authenticated
+    }
+    
+    // Update user display
+    const userEmailElement = document.getElementById('admin-user-email');
+    if (userEmailElement && window.supabaseAuth) {
+        const { data } = window.supabaseAuth.getUser();
+        if (data.user) {
+            userEmailElement.textContent = data.user.email;
+        }
+    }
+    
     // Configuration
     const SUPABASE_URL = 'https://mohluzgrkwpcccyzgoyw.supabase.co';
     const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1vaGx1emdya3dwY2NjeXpnb3l3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTYxNDk3OCwiZXhwIjoyMDc3MTkwOTc4fQ.JEl6tuhNf6EM-2gj8GtaEzVLRC8BJlCjLInhDycL62c';

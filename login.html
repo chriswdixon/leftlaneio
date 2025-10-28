@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - LeftLane.io</title>
+    <meta name="description" content="Secure admin login for LeftLane.io blog management.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login-styles.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="logo.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- Background -->
+    <div class="background"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img src="logo.svg" alt="LeftLane.io">
+                    <span class="logo-text">LeftLane.io</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="news.html" class="nav-link">News</a></li>
+                </ul>
+                
+                <div class="nav-right">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                        <span id="theme-icon">☀️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="login-main">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <h1>Admin Login</h1>
+                    <p>Access the LeftLane.io admin panel</p>
+                </div>
+                
+                <div class="login-content">
+                    <!-- Login Form -->
+                    <form id="login-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required placeholder="admin@leftlane.io">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required placeholder="••••••••">
+                        </div>
+                        
+                        <button type="submit" class="login-btn" id="login-btn">
+                            Sign In
+                        </button>
+                        
+                        <div class="auth-links">
+                            <a href="#" id="forgot-password-link">Forgot your password?</a>
+                        </div>
+                    </form>
+                    
+                    <!-- Forgot Password Form -->
+                    <form id="forgot-password-form" class="auth-form hidden">
+                        <div class="form-group">
+                            <label for="reset-email">Email Address</label>
+                            <input type="email" id="reset-email" name="reset-email" required placeholder="admin@leftlane.io">
+                        </div>
+                        
+                        <button type="submit" class="login-btn" id="reset-btn">
+                            Send Reset Link
+                        </button>
+                        
+                        <div class="auth-links">
+                            <a href="#" id="back-to-login-link">Back to login</a>
+                        </div>
+                    </form>
+                    
+                    <!-- Reset Password Form -->
+                    <form id="reset-password-form" class="auth-form hidden">
+                        <div class="form-group">
+                            <label for="new-password">New Password</label>
+                            <input type="password" id="new-password" name="new-password" required placeholder="••••••••">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            <input type="password" id="confirm-password" name="confirm-password" required placeholder="••••••••">
+                        </div>
+                        
+                        <button type="submit" class="login-btn" id="update-password-btn">
+                            Update Password
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Message Display -->
+                <div id="auth-message" class="auth-message"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Authenticating...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>
