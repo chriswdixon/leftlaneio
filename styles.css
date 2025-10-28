@@ -213,8 +213,8 @@ body {
 /* Dark Mode Toggle */
 .theme-toggle {
     position: fixed;
-    bottom: 2rem;
-    right: 2rem;
+    top: 1.5rem;
+    right: 1.5rem;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -256,11 +256,16 @@ body {
 }
 
 .hero-title {
-    font-size: 3.5rem;
+    font-family: 'Kaushan Script', handwriting;
+    font-size: 4.5rem;
     font-weight: 700;
-    color: var(--background-color);
+    color: #0c71c3;
     margin-bottom: var(--spacing-md);
     line-height: 1.2;
+}
+
+[data-theme="dark"] .hero-title {
+    color: #2b87da;
 }
 
 .hero-subtitle {
@@ -686,7 +691,7 @@ body {
     }
     
     .theme-toggle {
-        bottom: 1rem;
+        top: 1rem;
         right: 1rem;
         width: 45px;
         height: 45px;
